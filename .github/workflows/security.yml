@@ -57,7 +57,7 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run FastAPI Application in Background
-      # Запускаем uvicorn на порту 8000 в фоне. Символ & важен!
+      # Запускаем uvicorn на порту 8000 в фоне
       run: |
         uvicorn app.main:app --host 127.0.0.1 --port 8000 &
         sleep 5 # Даем серверу 5 секунд на запуск и инициализацию БД
@@ -66,14 +66,9 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y nikto
 
     - name: Run DAST Scan with Nikto
-      # Сканируем наше запущенное приложение и сохраняем отчет в формате HTML
-      # Флаг -Format h сохраняет html, -output выводит файл. 
-      # Мы добавляем "|| true", чтобы пайплайн не падал, если Nikto найдет просто предупреждения, 
-      # так как нам нужен сохраненный отчет.
       run: nikto -h http://127.0.0.1:8000 -Format h -output dast_report.html || true
 
     - name: Upload DAST Report Artifact
-      # Сохраняем сгенерированный HTML отчет в артефакты GitHub Actions, чтобы его можно было скачать
       uses: actions/upload-artifact@v4
       with:
         name: dast-security-report

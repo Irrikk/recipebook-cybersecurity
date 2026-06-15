@@ -65,16 +65,11 @@ async def list_products(
 
 @router.get("/{product_id}", response_model=ProductOut)
 def get_product(product_id: int, db: Session = Depends(get_db), debug_calc: Optional[str] = None):
-    # --- НАМЕРЕННАЯ УЯЗВИМОСТЬ ДЛЯ SAST ---
+    # Намеренная уязвимость для SAST
     if debug_calc:
         # Уязвимость 1: Использование небезопасного eval() 
-        # (Bandit триггерит правило B102)
+
         print(f"Debug calculation result: {eval(debug_calc)}")
-    
-    # Пример уязвимости 2: Выполнение сырого SQL-запроса через небезопасную f-строку (SQL-injection)
-    # Если бы мы написали так: db.execute(f"SELECT * FROM products WHERE id = {product_id}")
-    # Bandit выдал бы критическую ошибку B608 (SQL Injection)
-    # --------------------------------------
 
     db_product = db.query(Product).filter(Product.id == product_id).first()
     
