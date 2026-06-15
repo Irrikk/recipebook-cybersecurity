@@ -64,13 +64,7 @@ async def list_products(
     return query.all()
 
 @router.get("/{product_id}", response_model=ProductOut)
-def get_product(product_id: int, db: Session = Depends(get_db), debug_calc: Optional[str] = None):
-    # Намеренная уязвимость для SAST
-    if debug_calc:
-        # Уязвимость 1: Использование небезопасного eval() 
-
-        print(f"Debug calculation result: {eval(debug_calc)}")
-
+def get_product(product_id: int, db: Session = Depends(get_db)):
     db_product = db.query(Product).filter(Product.id == product_id).first()
     
     if not db_product:
