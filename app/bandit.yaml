@@ -1,9 +1,0 @@
-profiles:
-    test_suite:
-        include:
-            - B102 # Использование exec / eval
-            - B608 # Сырые SQL-инъекции в строках
-
-exclude_dirs:
-    - 'venv'
-    - '.github'

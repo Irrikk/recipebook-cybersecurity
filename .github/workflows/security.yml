@@ -20,7 +20,7 @@ jobs:
     - name: Install Bandit
       run: pip install bandit
     - name: Run Bandit Scan
-      run: bandit -c bandit.yaml -r .
+      run: bandit -r . -x ./venv,./.github
 
   sca:
     name: 2. Dependency Checker (SCA)
