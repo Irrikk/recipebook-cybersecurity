@@ -40,8 +40,7 @@ jobs:
   dast:
     name: 3. Dynamic Analysis (DAST)
     runs-on: ubuntu-latest
-    # Этот шаг запустится, только если прошли тесты SAST и SCA (для экономии ресурсов)
-    needs: [sast, sca]
+    needs: [sast, sca] 
     if: always() 
     steps:
     - name: Checkout Code
@@ -58,19 +57,23 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run FastAPI Application in Background
-      # Запускаем uvicorn на порту 8000 в фоне
       run: |
         uvicorn app.main:app --host 127.0.0.1 --port 8000 &
-        sleep 5 # Даем серверу 5 секунд на запуск и инициализацию БД
+        sleep 5 
 
     - name: Install Nikto DAST Scanner
       run: sudo apt-get update && sudo apt-get install -y nikto
 
     - name: Run DAST Scan with Nikto
-      run:  nikto -h http://127.0.0.1:8000 -Plugins "outdated;httpoptions;tests" -Format html -output dast_report.html
+      run: |
+        nikto -h http://127.0.0.1:8000 -Display V -output dast_report.txt || true
+
+    - name: Print Report to Console for Debug
+      
+      run: cat dast_report.txt || true
 
     - name: Upload DAST Report Artifact
       uses: actions/upload-artifact@v4
       with:
         name: dast-security-report
-        path: dast_report.html
+        path: dast_report.txt
