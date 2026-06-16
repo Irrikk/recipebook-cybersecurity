@@ -41,7 +41,8 @@ jobs:
     name: 3. Dynamic Analysis (DAST)
     runs-on: ubuntu-latest
     # Этот шаг запустится, только если прошли тесты SAST и SCA (для экономии ресурсов)
-    needs: [sast, sca] 
+    needs: [sast, sca]
+    if: always() 
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4

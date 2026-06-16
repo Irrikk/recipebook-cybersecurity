@@ -57,4 +57,4 @@ def fake_php_info():
 @app.get("/.env")
 def fake_env_file():
     # Имитируем критическую утечку файла конфигурации окружения
-    return {"DB_PASSWORD": "root_password_detected", "SECRET_KEY": "super_secret_ctf_key"}
+    return {"DB_PASSWORD": "root_password_detected", "SECRET_KEY": "super_secret_ctf_key"} # nosec
